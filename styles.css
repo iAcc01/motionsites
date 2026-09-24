@@ -1,0 +1,2362 @@
+/* ==========================================================================
+   Moroo — 设计系统
+   视觉规格提取自 Body1.svg 设计稿：白底 + 墨色 #2F2F2F + 品牌橙 #F56200，
+   衬线展示标题 + 全圆角控件；暗色主题为同令牌体系的镜像推导。
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. 设计令牌
+   -------------------------------------------------------------------------- */
+:root {
+  /* 圆角 */
+  --radius: 1rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* 字体 */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  /* 展示标题：设计稿大标题为衬线体（Song 风格，粗字重 + 橙色关键词） */
+  --font-display:
+    "Songti SC", "Noto Serif SC", "Source Han Serif SC", Georgia,
+    "Times New Roman", serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+
+  /* 字号阶梯 */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+
+  /* 过渡 */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-card: 0.3s ease-out;
+
+  /* 品牌渐变（标志性视觉资产，两主题共用）
+     取自设计稿品牌橙 #F56200：同色相的亮橙 → 橙 → 深橙径向渐变 */
+  --gradient-x: 44.373%;
+  --gradient-y: 35.1526%;
+  --brand-gradient: radial-gradient(
+    80.17% 109.2% at var(--gradient-x, 44.373%) var(--gradient-y, 35.1526%),
+    rgb(255, 158, 77) 0%,
+    rgb(245, 98, 0) 42.83%,
+    rgb(196, 70, 0) 88.38%
+  );
+  /* 渐变填充块之上的文字色（渐变不随主题变，故此值也不变） */
+  --on-gradient: #ffffff;
+
+  /* 布局 */
+  --shell-max: 2480px;
+  --grid-gap: 2px;
+}
+
+/* ============================ 暗色主题（默认） ============================ */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* 色板：原值 1:1 取自 motionsites.ai */
+  --background: #121212;
+  --foreground: #f5f5f5;
+  --card: #292929;
+  --card-foreground: #f5f5f5;
+  --popover: #292929;
+  --popover-foreground: #f5f5f5;
+  --primary: #f56200;
+  --primary-foreground: #fff;
+  --secondary: #303030;
+  --secondary-foreground: #f5f5f5;
+  --muted: #292929;
+  --muted-foreground: #ababab;
+  --accent: #303030;
+  --accent-foreground: #f5f5f5;
+  --destructive: #ef4444;
+  --destructive-border: rgba(239, 68, 68, 0.35);
+  --destructive-hover-bg: rgba(239, 68, 68, 0.12);
+  --border: #303030;
+  --input: #292929;
+  --ring: #f56200;
+
+  --glow-opacity: 0.25;
+
+  /* 分段控件（筛选器 pill），原值取自原站内联样式 */
+  --pill-track-bg: transparent;
+  --pill-track-border: rgba(255, 255, 255, 0.1);
+  --pill-active-bg: rgb(32, 32, 32);
+  --pill-active-border-top: rgb(59, 59, 59);
+  --pill-active-border: rgb(42, 42, 42);
+  --pill-active-shadow: none;
+  --pill-idle-fg: rgba(255, 255, 255, 0.72);
+
+  /* 筛选栏（Dribbble 规格映射）
+     浅色下 tab 激活底为原值 #f8f7f4；暗色下改用比背景更亮的表面 */
+  --tab-active-bg: #303030;
+  --control-bg: var(--background);
+  --control-border: #303030;
+  --control-border-hover: #454545;
+  --shadow-dropdown: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+  /* 组件语义色 */
+  --nav-link-fg: rgba(255, 255, 255, 0.6);
+  --surface-1: #262626;
+  --code-bg: #121212;
+  --skeleton-sheen: rgba(255, 255, 255, 0.1);
+  --card-placeholder: rgba(204, 221, 255, 0.06);
+  --star-fg: #f56200;
+  --success-fg: rgb(134, 239, 172);
+  /* Hero 动态点阵 */
+  --hero-dot: rgba(255, 255, 255, 0.028);
+  --hero-dot-glow: rgba(255, 224, 186, 0.2);
+  --overlay-bg: rgba(0, 0, 0, 0.72);
+  --dialog-foot-bg: rgba(0, 0, 0, 0.18);
+  --shadow-dialog: 0 24px 60px rgba(0, 0, 0, 0.5);
+  --shadow-toast: 0 12px 32px rgba(0, 0, 0, 0.45);
+
+  /* 详情查看器 */
+  --viewer-bg: rgba(10, 10, 10, 0.85);
+  --viewer-btn-bg: rgba(255, 255, 255, 0.08);
+  --viewer-btn-border: rgba(255, 255, 255, 0.12);
+  --viewer-btn-hover: rgba(255, 255, 255, 0.16);
+  --shadow-stage: 0 24px 70px rgba(0, 0, 0, 0.6);
+  --primary-solid: #f5f5f5;
+  --primary-solid-fg: #121212;
+}
+
+/* ============================== 浅色主题 ==============================
+   浅色为设计稿（Body1.svg）的原生主题：纯白底、墨色 #2F2F2F 正文、
+   品牌橙 #F56200 强调色、#F2F2F2 浅灰表面、发丝级描边。
+   ====================================================================== */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --background: #ffffff;
+  --foreground: #2f2f2f;
+  --card: #f2f2f2;
+  --card-foreground: #2f2f2f;
+  --popover: #ffffff;
+  --popover-foreground: #2f2f2f;
+  --primary: #f56200;
+  --primary-foreground: #fff;
+  --secondary: #f2f2f2;
+  --secondary-foreground: #2f2f2f;
+  --muted: #f2f2f2;
+  --muted-foreground: #6e6e6e;
+  --accent: #f2f2f2;
+  --accent-foreground: #2f2f2f;
+  --destructive: #dc2626;
+  --destructive-border: rgba(220, 38, 38, 0.35);
+  --destructive-hover-bg: rgba(220, 38, 38, 0.09);
+  --border: rgba(47, 47, 47, 0.09);
+  --input: #ffffff;
+  --ring: #f56200;
+
+  --glow-opacity: 0.3;
+
+  /* 分段控件（筛选器 pill）：设计稿激活段为 #F2F2F2 浅灰胶囊，无投影 */
+  --pill-track-bg: transparent;
+  --pill-track-border: rgba(47, 47, 47, 0.08);
+  --pill-active-bg: #f2f2f2;
+  --pill-active-border-top: rgba(47, 47, 47, 0.04);
+  --pill-active-border: rgba(47, 47, 47, 0.04);
+  --pill-active-shadow: none;
+  --pill-idle-fg: rgba(47, 47, 47, 0.55);
+
+  /* 筛选栏：控件为白底 + 发丝描边（设计稿描边为 #2F2F2F @ 5%） */
+  --tab-active-bg: #f2f2f2;
+  --control-bg: #ffffff;
+  --control-border: rgba(47, 47, 47, 0.08);
+  --control-border-hover: rgba(47, 47, 47, 0.18);
+  --shadow-dropdown: 0 12px 32px rgba(0, 0, 0, 0.1);
+
+  --nav-link-fg: rgba(47, 47, 47, 0.58);
+  --surface-1: #f5f5f5;
+  --code-bg: #f7f7f7;
+  --skeleton-sheen: rgba(0, 0, 0, 0.05);
+  /* 设计稿卡片占位：#404040 @ 6% */
+  --card-placeholder: rgba(64, 64, 64, 0.06);
+  --star-fg: #f56200;
+  --success-fg: rgb(21, 128, 61);
+  --hero-dot: rgba(0, 0, 0, 0.09);
+  --hero-dot-glow: rgba(202, 100, 12, 0.7);
+  --overlay-bg: rgba(23, 23, 23, 0.45);
+  --dialog-foot-bg: rgba(0, 0, 0, 0.03);
+  --shadow-dialog: 0 24px 60px rgba(0, 0, 0, 0.18);
+  --shadow-toast: 0 12px 32px rgba(0, 0, 0, 0.14);
+
+  /* 详情查看器：浅色毛玻璃遮罩 */
+  --viewer-bg: rgba(255, 255, 255, 0.85);
+  --viewer-btn-bg: rgba(255, 255, 255, 0.9);
+  --viewer-btn-border: rgba(0, 0, 0, 0.08);
+  --viewer-btn-hover: #ffffff;
+  --shadow-stage: 0 18px 50px rgba(0, 0, 0, 0.14);
+  --primary-solid: #2f2f2f;
+  --primary-solid-fg: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* 切换主题瞬间的过渡，240ms 后由 JS 移除 */
+.theming,
+.theming *,
+.theming *::before,
+.theming *::after {
+  transition:
+    background-color 0.2s ease,
+    background-image 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. 关键帧（1:1 复刻原站）
+   -------------------------------------------------------------------------- */
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes parallax-fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up-banner {
+  0% {
+    opacity: 0;
+    transform: translateY(120%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero 点阵：斜向漂移正好一个网格（14px），首尾衔接无缝 */
+@keyframes hero-dots-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 14px 14px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. 动效降级
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .shimmer,
+  .spinner,
+  .dotfield::before,
+  .dotfield::after {
+    animation: none !important;
+  }
+  /* 视差位移也一并停掉，光斑跟随属直接响应输入，保留 */
+  .dotfield::before,
+  .dotfield::after {
+    transform: none !important;
+  }
+  .theming,
+  .theming *,
+  .theming *::before,
+  .theming *::after,
+  .filterbar {
+    transition: none !important;
+  }
+  * {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6. 顶部导航
+   -------------------------------------------------------------------------- */
+/* 导航总高 60px：内容 36px + 上下 12px 内边距 */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 60px;
+  padding: 12px 16px;
+}
+
+/* 三分栏：两侧等权重伸缩，中间搜索因此始终视觉居中 */
+.nav__side {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 27px;
+  letter-spacing: normal;
+}
+
+.nav__logo {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+/* 深色版 logo 为白色描线，浅色版为深蓝+薄荷绿，按主题二选一 */
+[data-theme="dark"] .nav__logo--light,
+[data-theme="light"] .nav__logo--dark {
+  display: none;
+}
+
+.nav__links {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  min-width: 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.nav__link {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--nav-link-fg);
+  transition: color var(--transition-fast);
+}
+
+.nav__link:hover,
+.nav__link.is-active {
+  color: var(--foreground);
+}
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 1 1 0;
+}
+
+/* 用户头像：仅展示，不承载登录/菜单，故不做 hover 与指针反馈 */
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  margin-left: 4px;
+  border-radius: var(--radius-full);
+  background-color: var(--surface-1);
+  color: var(--muted-foreground);
+}
+
+.avatar__img {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+/* --------------------------------------------------------------------------
+   7. 按钮
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  isolation: isolate;
+  transition:
+    opacity var(--transition-fast),
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn--surface {
+  background-color: var(--pill-active-bg);
+  color: var(--foreground);
+  border-top: 1px solid var(--pill-active-border-top);
+  border-right: 1px solid var(--pill-active-border);
+  border-bottom: 1px solid var(--pill-active-border);
+  border-left: 1px solid var(--pill-active-border);
+  box-shadow: var(--pill-active-shadow);
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: var(--pill-idle-fg);
+}
+
+.btn--ghost:hover {
+  color: var(--foreground);
+  background-color: var(--secondary);
+}
+
+/* 白色描边按钮：与筛选栏「最新」下拉（.dropdown__btn）同一套外观 */
+.btn--outline {
+  background-color: var(--control-bg);
+  border: 1px solid var(--control-border);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.01);
+  color: var(--foreground);
+  transition:
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.btn--outline:hover {
+  border-color: var(--control-border-hover);
+  opacity: 1;
+}
+
+.btn--primary {
+  background: var(--brand-gradient);
+  color: var(--on-gradient);
+  font-weight: 700;
+}
+
+.btn--danger {
+  background-color: transparent;
+  color: var(--destructive);
+  border: 1px solid var(--destructive-border);
+}
+
+.btn--danger:hover {
+  background-color: var(--destructive-hover-bg);
+  opacity: 1;
+}
+
+.btn--block {
+  width: 100%;
+}
+
+.btn--icon {
+  width: 40px;
+  padding: 0;
+  border-radius: var(--radius-full);
+  color: var(--muted-foreground);
+}
+
+.btn--icon:hover {
+  color: var(--foreground);
+  background-color: var(--secondary);
+  opacity: 1;
+}
+
+.btn__icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* 通知 / 主题图标加大到 20px */
+#btnBell .btn__icon,
+#btnTheme .btn__icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* 导航操作区统一 36px 高（与头像一致）：图标按钮 36×36，主按钮 36 高 */
+.nav .btn--icon {
+  width: 36px;
+  height: 36px;
+}
+
+.nav .btn--outline {
+  height: 36px;
+}
+
+/* 主题切换：暗色下显示「切到浅色」的太阳，浅色下显示月亮 */
+[data-theme="dark"] .icon-moon,
+[data-theme="light"] .icon-sun {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   8. Hero
+   -------------------------------------------------------------------------- */
+/* 内容区统一限宽并水平居中：筛选栏、瀑布流（及 Hero）共用此外壳 */
+.shell {
+  width: 100%;
+  max-width: var(--shell-max);
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+
+/* 动态点阵背景区：横跨导航 + Hero + 筛选栏。
+   刻意不设 isolation / z-index，保持它不成为层叠上下文，
+   否则内部 dropdown（z-index:20）会被后面的瀑布流盖住。
+   伪元素用 z-index:-1，落在 root 层叠上下文的负层，
+   即 body 传播到 canvas 的背景之上、所有内容之下。 */
+.dotfield {
+  position: relative;
+  /* 以下四项由 JS 按光标位置写入；这里的默认值即「无光标」状态 */
+  --hero-mx: 50%;
+  --hero-my: 50%;
+  --dot-tx: 0px;
+  --dot-ty: 0px;
+  /* 光斑直径 */
+  --hero-spot: 420px;
+  /* 漂移周期：两层共用，必须一致，否则两层点阵会错位 */
+  --hero-drift-dur: 11s;
+}
+
+/* 底层中性点阵缓慢漂移，上层同色点阵透过一个跟随光标的柔光斑显现。
+   两层是同一套网格，故必须共享同样的漂移周期与视差位移，否则不重合。
+   视差用 transform（不与 drift 的 background-position 冲突）；
+   位移幅度远小于 mask 的边缘渐隐宽度，因此不会露出空边。 */
+.dotfield::before,
+.dotfield::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-size: 14px 14px;
+  pointer-events: none;
+  /* 用 2D translate 而非 translate3d：后者会把这层强制提升为合成层，
+     而它处在 z-index:-1 的负层，提升后的绘制顺序在部分浏览器上不稳定 */
+  transform: translate(var(--dot-tx), var(--dot-ty));
+  /* 过渡在每帧被重启，形成跟随光标的黏滞拖尾 */
+  transition:
+    transform 0.3s ease-out,
+    -webkit-mask-position 0.14s ease-out,
+    mask-position 0.14s ease-out;
+}
+
+.dotfield::before {
+  background-image: radial-gradient(
+    circle 0.9px at 50% 50%,
+    var(--hero-dot) 0 55%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    92% 108% at 50% 42%,
+    #000 34%,
+    transparent 92%
+  );
+  mask-image: radial-gradient(92% 108% at 50% 42%, #000 34%, transparent 92%);
+  animation: hero-dots-drift var(--hero-drift-dur) linear infinite;
+}
+
+/* 发光层：整层点阵是亮色，只在光斑罩住的范围内显现。
+   光斑位置只有这一个来源（--hero-mx/--hero-my），无光标时为居中默认值，
+   因此没有动画与跟随互相抢 mask-position 的问题。 */
+.dotfield::after {
+  background-image: radial-gradient(
+    circle 1.2px at 50% 50%,
+    var(--hero-dot-glow) 0 45%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(closest-side, #000, transparent);
+  mask-image: radial-gradient(closest-side, #000, transparent);
+  -webkit-mask-size: var(--hero-spot) var(--hero-spot);
+  mask-size: var(--hero-spot) var(--hero-spot);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: calc(var(--hero-mx) - var(--hero-spot) / 2)
+    calc(var(--hero-my) - var(--hero-spot) / 2);
+  mask-position: calc(var(--hero-mx) - var(--hero-spot) / 2)
+    calc(var(--hero-my) - var(--hero-spot) / 2);
+  animation: hero-dots-drift var(--hero-drift-dur) linear infinite;
+}
+
+/* Hero：设计稿为「衬线大标题（关键词橙色）+ 右侧金属吉祥物 + 大搜索胶囊」 */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 48px;
+  padding-bottom: 56px;
+}
+
+.hero__title {
+  position: relative;
+  margin-bottom: 40px;
+  font-family: var(--font-display);
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+
+/* 「热爱」「设计」：品牌橙纯色（设计稿无渐变） */
+.hero__accent {
+  color: var(--primary);
+}
+
+/* 金属吉祥物：叠在标题右端、与末字轻微交叠（设计稿 190×172 @ 1440 宽） */
+.hero__mascot {
+  display: none;
+  position: absolute;
+  right: -104px;
+  top: -40px;
+  width: 140px;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   9. 筛选栏（规格提取自 Body1.svg：40px 高、白底 1.5px 发丝描边控件、
+      激活 tab 为 #F2F2F2 全圆角胶囊、文字 14px 墨色）
+      三段式 space-between：排序下拉 / 分类 tab / 筛选按钮
+   -------------------------------------------------------------------------- */
+.filterbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 40px;
+  /* 设计稿：栏底 332 → 卡片顶 352，间距 20px */
+  margin-bottom: 20px;
+}
+
+/* 外壳固定高度：筛选栏吸附固定后脱离文档流，原空间保留避免页面跳动 */
+#library {
+  height: 60px;
+}
+
+/* 吸附态：固定在视口顶部（向下滚动时出现）；is-hidden 时向上收起（向上滚动） */
+.filterbar.is-pinned {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  height: auto;
+  max-width: var(--shell-max);
+  margin: 0 auto;
+  padding: 8px 16px;
+  background-color: var(--background);
+  border-bottom: 1px solid var(--border);
+  transform: translateY(0);
+  transition: transform 0.25s ease;
+}
+
+.filterbar.is-pinned.is-hidden {
+  transform: translateY(-110%);
+}
+
+@media (min-width: 640px) {
+  .filterbar.is-pinned {
+    padding-inline: 24px;
+  }
+}
+
+/* 两侧各自吸收一半剩余空间，使中间的 tab 组落在筛选栏正中；
+   内容过宽时两侧退回自身宽度，由中间区域滚动承载 */
+.filterbar__views,
+.filterbar__settings {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  flex: 1 0 auto;
+}
+
+.filterbar__settings {
+  justify-content: flex-end;
+}
+
+/* ---------- 排序下拉（设计稿：87×40 白底胶囊，1.5px 发丝描边 @8%，无投影） ---------- */
+.dropdown {
+  position: relative;
+  display: inline-flex;
+}
+
+.dropdown__btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: var(--radius-full);
+  background-color: var(--control-bg);
+  border: 1.5px solid var(--control-border);
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.dropdown__btn:hover {
+  border-color: var(--control-border-hover);
+}
+
+/* 设计稿：8×4 描边下箭头，墨色，随按钮文字色 */
+.dropdown__caret {
+  width: 8px;
+  height: 6px;
+  flex-shrink: 0;
+  transition: transform var(--transition-fast);
+}
+
+.dropdown__btn[aria-expanded="true"] .dropdown__caret {
+  transform: rotate(180deg);
+}
+
+/* 下拉菜单与筛选面板共用的浮层外观 */
+.dropdown__menu,
+.dropdown__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  z-index: 20;
+  display: none;
+  border-radius: var(--radius-3xl);
+  background-color: var(--popover);
+  border: 1px solid var(--control-border);
+  box-shadow: var(--shadow-dropdown);
+}
+
+.dropdown__menu {
+  left: 0;
+  min-width: 180px;
+  padding: 4px;
+  overflow: hidden;
+}
+
+.dropdown.is-open .dropdown__menu,
+.dropdown.is-open .dropdown__panel {
+  display: block;
+  animation: dropdown-in 0.16s ease-out;
+}
+
+.dropdown__menu button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: var(--radius-full);
+  text-align: left;
+  white-space: nowrap;
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition: background-color var(--transition-fast);
+}
+
+.dropdown__menu button:hover {
+  background-color: var(--secondary);
+}
+
+.dropdown__menu button[aria-selected="true"] {
+  background-color: var(--tab-active-bg);
+}
+
+/* ---------- 分类 tab ---------- */
+.filterbar__categories {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex: 0 1 auto;
+  height: 40px;
+}
+
+.filterbar__categories ul {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+}
+
+/* 居中用 auto 外边距而非 justify-content: center。
+   后者在内容溢出时会裁掉左侧且无法滚回；auto 外边距在无剩余
+   空间时自动归零，因此溢出场景下滚动依然完整可达。 */
+.filterbar__categories ul > li:first-child {
+  margin-left: auto;
+}
+
+.filterbar__categories ul > li:last-child {
+  margin-right: auto;
+}
+
+.filterbar__categories ul::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 20px;
+  white-space: nowrap;
+  transition:
+    color 0.1s,
+    background-color 0.1s;
+}
+
+/* Dribbble 的 hover 只让文字变浅，不加背景 */
+.tab:hover {
+  color: var(--muted-foreground);
+}
+
+.tab.is-active {
+  background-color: var(--tab-active-bg);
+  color: var(--foreground);
+}
+
+.tab.is-active:hover {
+  color: var(--foreground);
+}
+
+/* 溢出滚动箭头：不可用时隐藏（对应 Dribbble 的 .d-none） */
+.scroll {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.scroll button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 40px;
+  color: var(--foreground);
+  transition: color var(--transition-fast);
+}
+
+.scroll button:hover {
+  color: var(--muted-foreground);
+}
+
+.scroll button.is-hidden {
+  display: none;
+}
+
+.scroll svg {
+  width: 12px;
+  height: 12px;
+}
+
+.scroll--back svg {
+  transform: rotate(90deg);
+}
+
+.scroll--fwd svg {
+  transform: rotate(-90deg);
+}
+
+/* ---------- 筛选按钮（设计稿：87×40 白底胶囊，1.5px 发丝描边 @8%，三线漏斗图标） ---------- */
+.filters-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: var(--radius-full);
+  background-color: var(--control-bg);
+  border: 1.5px solid var(--control-border);
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 20px;
+  white-space: nowrap;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
+}
+
+.filters-btn:hover,
+.filters-btn[aria-expanded="true"] {
+  border-color: var(--control-border-hover);
+}
+
+/* 设计稿：漏斗图标 12×9.5，1.5px 描边 */
+.filters-btn__icon {
+  width: 12px;
+  height: 9.5px;
+  flex-shrink: 0;
+}
+
+/* 有筛选条件生效时的小圆点提示 */
+.filters-btn__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--primary);
+}
+
+.filters-btn__dot[hidden] {
+  display: none;
+}
+
+/* ---------- 筛选面板 ---------- */
+.dropdown__panel {
+  right: 0;
+  width: 288px;
+  padding: 16px;
+}
+
+.dropdown__panel-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+/* 搜索框（位于顶部导航中间） */
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search__icon {
+  position: absolute;
+  left: 14px;
+  width: 15px;
+  height: 15px;
+  color: var(--muted-foreground);
+  pointer-events: none;
+}
+
+.search__input {
+  width: 100%;
+  height: 40px;
+  padding: 0 16px 0 37px;
+  border-radius: var(--radius-full);
+  background-color: var(--input);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  transition: border-color var(--transition-fast);
+}
+
+.search__input::placeholder {
+  color: var(--muted-foreground);
+}
+
+.search__input:focus {
+  outline: none;
+  border-color: var(--ring);
+}
+
+/* ---------- Hero 大搜索胶囊（设计稿：720×48 全圆角白底 + 橙色圆形提交钮） ---------- */
+.search--hero {
+  width: min(720px, 100%);
+  margin: 0 auto;
+}
+
+.search--hero .search__input {
+  height: 48px;
+  padding: 0 58px 0 22px;
+  border-radius: var(--radius-full);
+  /* 设计稿：1px 内框透明，4px 外描边 #2F2F2F @ 5% */
+  border-color: transparent;
+  box-shadow: 0 0 0 4px rgba(47, 47, 47, 0.05);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+[data-theme="dark"] .search--hero .search__input {
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.06);
+}
+
+/* 外描边不被相邻元素压住 */
+.search--hero {
+  margin-block: 4px;
+}
+
+.search__submit {
+  position: absolute;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background-color: var(--primary);
+  color: #fff;
+  transition: opacity var(--transition-fast);
+}
+
+.search__submit:hover {
+  opacity: 0.88;
+}
+
+.search__submit svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ---------- 开关 ---------- */
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch__track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background-color: var(--secondary);
+  border: 1px solid var(--border);
+  transition: background-color var(--transition-fast);
+}
+
+.switch__track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  background-color: var(--muted-foreground);
+  transition:
+    transform var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.switch input:checked + .switch__track {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.switch input:checked + .switch__track::after {
+  transform: translateX(16px);
+  background-color: #fff;
+}
+
+.switch input:focus-visible + .switch__track {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.switch__text {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+/* --------------------------------------------------------------------------
+   10. Masonry 瀑布流（即梦规格：列宽 287px，列间距 2px，无缝拼贴）
+   -------------------------------------------------------------------------- */
+.masonry {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--grid-gap);
+  padding-bottom: 24px;
+}
+
+.masonry__col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-gap);
+}
+
+/* --------------------------------------------------------------------------
+   11. 卡片（即梦规格：整卡即封面，信息叠加在图上，hover 淡入）
+   -------------------------------------------------------------------------- */
+.card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--card-placeholder);
+  animation: parallax-fade-up 0.45s ease-out both;
+}
+
+/* 骨架屏 shimmer */
+.card__skeleton {
+  position: absolute;
+  inset: 0;
+  background-color: var(--secondary);
+  overflow: hidden;
+}
+
+.card__skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--skeleton-sheen),
+    transparent
+  );
+  animation: shimmer 1.6s infinite;
+}
+
+.card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.card__img.is-loaded {
+  opacity: 1;
+}
+
+/* 无图时的程序化渐变封面 */
+.card__cover {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+}
+
+.card__cover-glyph {
+  font-size: clamp(2rem, 6vw, 3.25rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  color: rgba(255, 255, 255, 0.16);
+}
+
+.card__noise {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  background-size: 60%;
+}
+
+/* 底部渐变遮罩（即梦 .gradient：linear-gradient(0deg, rgba(0,0,0,.4) …)） */
+.card__scrim {
+  position: absolute;
+  inset: auto 0 0;
+  height: 45%;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  background-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.4) 45%,
+    transparent 100%
+  );
+  transition: opacity 0.25s ease;
+}
+
+/* 信息条（即梦 .overlay：贴底、白字、hover 淡入） */
+.card__overlay {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 4;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.card:hover .card__scrim,
+.card:focus-visible .card__scrim,
+.card:hover .card__overlay,
+.card:focus-visible .card__overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card__meta {
+  min-width: 0;
+}
+
+.card__title {
+  color: #fff;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.card__category {
+  display: block;
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.card__tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.card__act {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background-color: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  color: rgba(255, 255, 255, 0.85);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.card__act:hover {
+  background-color: rgba(0, 0, 0, 0.55);
+  color: #fff;
+}
+
+.card__act.is-on {
+  color: var(--star-fg);
+}
+
+.card__act.is-done {
+  color: var(--success-fg);
+}
+
+/* 已收藏：仅收藏图标常驻高亮；标题/分类与复制按钮仍随 hover 淡入 */
+.card:has(.card__act.is-on) .card__overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card:has(.card__act.is-on) .card__meta,
+.card:has(.card__act.is-on) .card__act[data-copy] {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+/* 隐藏的复制按钮不可点击，避免误触 */
+.card:has(.card__act.is-on) .card__act[data-copy] {
+  pointer-events: none;
+}
+
+.card:has(.card__act.is-on):hover .card__meta,
+.card:has(.card__act.is-on):focus-visible .card__meta,
+.card:has(.card__act.is-on):hover .card__act[data-copy],
+.card:has(.card__act.is-on):focus-visible .card__act[data-copy] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* --------------------------------------------------------------------------
+   12. 加载
+   -------------------------------------------------------------------------- */
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 0;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--border);
+  border-top-color: var(--primary);
+  animation: spin 0.8s linear infinite;
+}
+
+/* --------------------------------------------------------------------------
+   13. 推广 / 提示卡（复刻原站插入位样式）
+   -------------------------------------------------------------------------- */
+.promo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+  padding: 24px;
+  margin-bottom: 32px;
+  border-radius: var(--radius-2xl);
+  background-color: var(--surface-1);
+  overflow: hidden;
+}
+
+.promo__title {
+  color: var(--foreground);
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.promo__text {
+  color: var(--muted-foreground);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.promo__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* 主 CTA：设计稿为品牌橙全圆角胶囊 + 白字 */
+.promo__cta {
+  width: fit-content;
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: opacity var(--transition-fast);
+}
+
+.promo__cta:hover {
+  opacity: 0.9;
+}
+
+/* 次级操作（导入）：去掉渐变填充，改描边，与主 CTA 同尺寸 */
+.promo__cta--ghost {
+  background-image: none;
+  background-color: transparent;
+  border: 1px solid var(--control-border);
+  box-shadow: none;
+  color: var(--foreground);
+  transition: border-color var(--transition-fast);
+}
+
+.promo__cta--ghost:hover {
+  border-color: var(--control-border-hover);
+  opacity: 1;
+}
+
+.promo__glow {
+  position: absolute;
+  right: -60px;
+  top: -60px;
+  width: 280px;
+  height: 280px;
+  border-radius: var(--radius-full);
+  background: var(--brand-gradient);
+  filter: blur(70px);
+  opacity: var(--glow-opacity);
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   14. 弹层（详情 / 编辑）
+   -------------------------------------------------------------------------- */
+/* ==========================================================================
+   详情查看器（布局与尺寸复刻 meigen.ai 的 Media Preview）
+   实测原值：遮罩 rgba(255,255,255,.85) + blur(24px)；图区 padding 64px、
+   图片 object-fit:contain；右栏宽 343px；使用按钮 44px 高 / 圆角 14px。
+   ========================================================================== */
+.viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  background-color: var(--viewer-bg);
+  backdrop-filter: blur(24px);
+  animation: fade-in 0.2s ease-out;
+}
+
+.viewer[hidden] {
+  display: none;
+}
+
+.viewer__inner {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+  animation: dialog-in 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------- 左：图片舞台 ---------- */
+.stage {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px;
+  overflow: hidden;
+}
+
+.stage__bar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.iconbtn {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  background-color: var(--viewer-btn-bg);
+  border: 1px solid var(--viewer-btn-border);
+  color: var(--foreground);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.iconbtn:hover {
+  background-color: var(--viewer-btn-hover);
+}
+
+.iconbtn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.kbd {
+  padding: 0 8px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 6px;
+  background-color: var(--viewer-btn-bg);
+  border: 1px solid var(--viewer-btn-border);
+  color: var(--muted-foreground);
+  font-size: 12px;
+  font-family: var(--font-mono);
+}
+
+.stage__figure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.stage__figure img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: var(--shadow-stage);
+}
+
+/* 无图时用卡片同款渐变占位 */
+.stage__placeholder {
+  display: grid;
+  place-items: center;
+  width: min(560px, 60vh);
+  aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  box-shadow: var(--shadow-stage);
+}
+
+.stage__placeholder span {
+  font-size: clamp(3rem, 9vw, 6rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ---------- 右：信息栏 ---------- */
+.sidepanel {
+  display: flex;
+  flex-direction: column;
+  width: 343px;
+  flex-shrink: 0;
+  background-color: var(--popover);
+  border-left: 1px solid var(--border);
+}
+
+.sidepanel__scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* 作者行 */
+.byline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.byline__who {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.byline__avatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  background-color: var(--secondary);
+}
+
+.byline__name {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.byline__handle {
+  display: block;
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background-color: var(--secondary);
+  color: var(--muted-foreground);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.chip[hidden] {
+  display: none;
+}
+
+/* 操作行 */
+.actionbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.metric {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 10px;
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+
+.metric[hidden] {
+  display: none;
+}
+
+.metric svg {
+  width: 15px;
+  height: 15px;
+}
+
+.linkbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: var(--radius-full);
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.linkbtn:hover {
+  background-color: var(--secondary);
+}
+
+.linkbtn svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.linkbtn.is-on {
+  color: var(--star-fg);
+}
+
+.linkbtn.is-done {
+  color: var(--success-fg);
+}
+
+/* 提示词 */
+.promptsec__label {
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.promptsec__text {
+  color: var(--foreground);
+  font-size: 13px;
+  line-height: 1.625;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.promptsec__text.is-clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.expand {
+  margin-top: 6px;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.expand:hover {
+  color: var(--foreground);
+}
+
+.expand[hidden] {
+  display: none;
+}
+
+/* 元信息 */
+.metalist {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: var(--text-xs);
+}
+
+.metalist dt {
+  color: var(--muted-foreground);
+}
+
+.metalist dd {
+  color: var(--foreground);
+  text-align: right;
+}
+
+.metalist a {
+  color: var(--muted-foreground);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.metalist a:hover {
+  color: var(--foreground);
+}
+
+/* 相关推荐 */
+.related[hidden] {
+  display: none;
+}
+
+.related__title {
+  margin-bottom: 10px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.related__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.related__item {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  background-color: var(--secondary);
+  cursor: pointer;
+}
+
+.related__item img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.related__item:hover img {
+  transform: scale(1.04);
+}
+
+/* 底部固定操作 */
+.sidepanel__foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* 删除按钮待确认态（二次点击确认） */
+#btnDelete.is-armed {
+  color: var(--destructive);
+  background-color: var(--destructive-hover-bg);
+}
+
+.usebtn {
+  flex: 1;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 14px;
+  background-color: var(--primary-solid);
+  color: var(--primary-solid-fg);
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: opacity var(--transition-fast);
+}
+
+.usebtn:hover {
+  opacity: 0.88;
+}
+
+/* 窄屏：改为上下布局 */
+@media (max-width: 899px) {
+  .viewer__inner {
+    flex-direction: column;
+  }
+
+  .stage {
+    flex: 0 0 45vh;
+    padding: 56px 20px 16px;
+  }
+
+  .sidepanel {
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .stage__bar {
+    top: 14px;
+    left: 14px;
+  }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background-color: var(--overlay-bg);
+  backdrop-filter: blur(4px);
+  animation: fade-in 0.2s ease-out;
+}
+
+.overlay[hidden] {
+  display: none;
+}
+
+.dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 720px;
+  max-height: min(86vh, 900px);
+  border-radius: var(--radius-2xl);
+  background-color: var(--popover);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-dialog);
+  overflow: hidden;
+  animation: dialog-in 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialog__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.dialog__title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.dialog__sub {
+  margin-top: 4px;
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
+}
+
+.dialog__body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.dialog__foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  background-color: var(--dialog-foot-bg);
+}
+
+.dialog__foot--split {
+  justify-content: space-between;
+}
+
+.prompt-box {
+  position: relative;
+  padding: 16px;
+  border-radius: var(--radius-xl);
+  background-color: var(--code-bg);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.tag {
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background-color: var(--secondary);
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   15. 表单
+   -------------------------------------------------------------------------- */
+.field {
+  margin-bottom: 16px;
+}
+
+.field__label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted-foreground);
+}
+
+.field__input,
+.field__textarea,
+.field__select {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--radius-xl);
+  background-color: var(--input);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  transition: border-color var(--transition-fast);
+}
+
+.field__textarea {
+  min-height: 190px;
+  font-family: var(--font-mono);
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.field__input:focus,
+.field__textarea:focus,
+.field__select:focus {
+  outline: none;
+  border-color: var(--ring);
+}
+
+.field__hint {
+  margin-top: 6px;
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
+}
+
+.field-row {
+  display: grid;
+  gap: 16px;
+}
+
+/* 封面图选择：链接输入 + 本地上传 */
+.imgpick {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.imgpick[hidden] {
+  display: none;
+}
+
+.imgpick .field__input {
+  flex: 1;
+  min-width: 0;
+}
+
+.imgpick .btn {
+  flex-shrink: 0;
+}
+
+/* 已选图片预览条：缩略图 + 文件名/尺寸 + 移除 */
+.imgpick__preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding: 8px;
+  border-radius: var(--radius-xl);
+  background-color: var(--code-bg);
+  border: 1px solid var(--border);
+}
+
+.imgpick__preview[hidden] {
+  display: none;
+}
+
+.imgpick__preview img {
+  width: 72px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  object-fit: cover;
+  background-color: var(--secondary);
+}
+
+.imgpick__meta {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.imgpick__clear {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  color: var(--muted-foreground);
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.imgpick__clear:hover {
+  color: var(--foreground);
+  background-color: var(--secondary);
+}
+
+.imgpick__clear svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   16. Toast
+   -------------------------------------------------------------------------- */
+.toasts {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 100vh;
+  width: 100%;
+  padding: 16px;
+  pointer-events: none;
+}
+
+.toast {
+  margin-left: auto;
+  padding: 12px 16px;
+  border-radius: var(--radius-xl);
+  background-color: var(--pill-active-bg);
+  border: 1px solid var(--pill-active-border-top);
+  color: var(--foreground);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  box-shadow: var(--shadow-toast);
+  animation: slide-up-banner 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   17. 页脚
+   -------------------------------------------------------------------------- */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  width: 100%;
+  padding: 24px 24px 48px;
+  color: var(--muted-foreground);
+  font-size: var(--text-sm);
+}
+
+.footer__links {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.footer a {
+  transition: color var(--transition-fast);
+}
+
+.footer a:hover {
+  color: var(--foreground);
+}
+
+/* --------------------------------------------------------------------------
+   18. 响应式（断点与原站一致：640 / 768 / 1024 / 1280）
+   -------------------------------------------------------------------------- */
+@media (min-width: 640px) {
+  .shell,
+  .nav {
+    padding-inline: 24px;
+  }
+
+  .hero {
+    padding-top: 64px;
+  }
+
+  .hero__title {
+    font-size: 36px;
+  }
+
+  .promo {
+    padding: 32px;
+  }
+
+  .promo__title {
+    font-size: var(--text-3xl);
+  }
+
+  .field-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer {
+    padding-inline: 32px;
+  }
+
+  .toasts {
+    width: auto;
+    max-width: 420px;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero__mascot {
+    display: block;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav__links {
+    display: flex;
+  }
+
+  .hero__title {
+    font-size: 40px;
+  }
+
+  .promo__title {
+    font-size: var(--text-4xl);
+  }
+}
+
+/* 窄屏：导航收起装饰性铃铛，避免操作区溢出 */
+@media (max-width: 767px) {
+  #btnBell {
+    display: none;
+  }
+}
+
+/* 超窄屏：收窄主按钮内边距，保证头像完整可见 */
+@media (max-width: 479px) {
+  .nav__actions .btn--outline {
+    padding: 0 14px;
+  }
+}
+
+/* 窄屏：排序下拉收起为纯图标，tab 让位 */
+@media (max-width: 719px) {
+  .filterbar {
+    gap: 8px;
+  }
+
+  .dropdown__btn {
+    padding: 0 12px;
+  }
+
+  .dropdown__btn > span {
+    display: none;
+  }
+
+  .filters-btn {
+    padding: 0 14px;
+  }
+
+  .filters-btn > span:not(.filters-btn__dot) {
+    display: none;
+  }
+
+  .dropdown__panel {
+    width: min(288px, calc(100vw - 32px));
+  }
+}
